@@ -37,7 +37,7 @@ Open `http://localhost:4193/`. Localhost map tiles use Stadia's documented devel
 
 Optional browser checks: install Playwright and Chrome, set `BROWSER_MODULES` to the Playwright module location if necessary, and run `node scripts/ui-check.mjs`. Set `BASE_URL` to test a deployed copy.
 
-Verification on 2 October 2026: nine calculation/export tests and eleven local browser checks passed, including real Stadia tile loading, custom points, empty audience handling, export and mobile overflow checks. The native WebMCP tool is feature-detected and optional; its execution is not covered by the browser script.
+Verification on 2 October 2026: nine calculation/export tests and eleven browser checks passed on both localhost and the published Cloudflare site, including real Stadia tile loading, custom points, empty audience handling, export and mobile overflow checks. A separate native WebMCP check successfully read the scenario; an input containing an unexpected field was rejected. WebMCP is feature-detected and optional; its native execution is not covered by the browser script.
 
 ## Deploy
 
