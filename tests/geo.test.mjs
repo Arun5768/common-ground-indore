@@ -1,0 +1,10 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';import {areas,candidates,distance,analyse,rank,planningBrief} from '../site/geo.mjs';
+test('distance is zero at the same point',()=>assert.equal(distance(areas[0],areas[0]),0));
+test('great-circle calculation matches one degree at equator',()=>assert.ok(Math.abs(distance({lat:0,lng:0},{lat:0,lng:1})-111.195)<.01));
+test('distance is symmetric',()=>assert.equal(distance(areas[0],areas[3]),distance(areas[3],areas[0])));
+test('illustrative audience totals 48',()=>assert.equal(analyse(candidates[0],areas,5).total,48));
+test('radius changes coverage without changing mean',()=>{const a=analyse(candidates[0],areas,3),b=analyse(candidates[0],areas,8);assert.ok(a.inside<=b.inside);assert.equal(a.mean,b.mean)});
+test('empty audience has no misleading zero-distance result',()=>{const x=analyse(candidates[0],areas.map(p=>({...p,count:0})),5);assert.equal(x.total,0);assert.equal(x.mean,null);assert.equal(x.max,null)});
+test('ranking is increasing weighted mean',()=>{const r=rank(candidates,areas,5);assert.ok(r[0].mean<=r[1].mean&&r[1].mean<=r[2].mean)});
+test('negative and fractional counts are rejected',()=>{for(const count of [-1,1.5,501])assert.throws(()=>analyse(candidates[0],[{...areas[0],count}],5))});
+test('brief records honest scope and exact selected point',()=>{const b=planningBrief(candidates[1],areas,8);assert.equal(b.selectedArea.id,'vijay');assert.equal(b.results.samplePeople,48);assert.match(b.method,/not road distance/);assert.match(b.dataset,/not real registrations/)});
